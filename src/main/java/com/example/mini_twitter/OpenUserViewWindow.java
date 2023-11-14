@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-// Import statements...
-
 public class OpenUserViewWindow extends Stage {
     private User selectedUser;
     private List<User> users;
