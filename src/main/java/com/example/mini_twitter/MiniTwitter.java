@@ -173,7 +173,6 @@ public class MiniTwitter extends Application {
         groupIdTextArea.setPrefWidth(150);
         groupIdTextArea.setPrefHeight(10);
         Button addGroupButton = new Button("Add Group");
-///////////////////fix this later/////////////////////////////////////////////////
         addGroupButton.setOnAction(event -> {
             String groupID = groupIdTextArea.getText();
             if (!groupID.isEmpty()) {
@@ -226,7 +225,7 @@ public class MiniTwitter extends Application {
                 }
             }
         });
-////////////////////////////////////////////////////////////////////////////
+
         Button openUserViewButton = new Button("Open User View");
         openUserViewButton.setOnAction(event -> {
             TreeItem<Entity> selectedTreeItem = treeView.getSelectionModel().getSelectedItem();
