@@ -8,12 +8,14 @@ public class Group implements Entity {
     private String name;
     private List<Entity> members;
     private List<Group> subgroups;
+    private long creationTime;
 
     public Group(String uniqueID, String name) {
         this.uniqueID = uniqueID;
         this.name = name;
         this.members = new ArrayList<>();
         this.subgroups = new ArrayList<Group>();
+        this.creationTime = System.currentTimeMillis();
     }
 
     @Override
@@ -67,4 +69,7 @@ public class Group implements Entity {
     public boolean containsMember(Entity member) {
         return members.contains(member);
     }
+
+    public long getCreationTime() {return creationTime;}
+
 }

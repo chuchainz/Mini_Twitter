@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import com.example.mini_twitter.User.User;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +32,9 @@ public class OpenUserViewWindow extends Stage {
         HBox hbox = new HBox(10);
 
         Label userNameLabel = new Label("User: " + selectedUser.getName());
-        userViewLayout.getChildren().add(userNameLabel);
+        Label creationTimeLabel = new Label("Creation Time: " + formatDate(selectedUser.getCreationTime()));
+        Label lastUpdateTimeLabel = new Label("Last Update Time: " + formatDate(selectedUser.getLastUpdateTime()));
+        userViewLayout.getChildren().addAll(userNameLabel, creationTimeLabel, lastUpdateTimeLabel);
 
         Button followButton = new Button("Follow");
         TextField followInput = new TextField();
@@ -79,7 +82,7 @@ public class OpenUserViewWindow extends Stage {
         hbox.getChildren().addAll(followButton, followInput);
         userViewLayout.getChildren().addAll(hbox, tweetListView, tweetTextField, tweetButton, refreshButton);
 
-        Scene userViewScene = new Scene(userViewLayout, 400, 300);
+        Scene userViewScene = new Scene(userViewLayout, 500, 350);
         setScene(userViewScene);
         userViewScene.getStylesheets().add("style.css");
     }
@@ -96,5 +99,8 @@ public class OpenUserViewWindow extends Stage {
         }
         return null;
     }
-}
 
+    private String formatDate(long timestamp) {
+        return new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date(timestamp));
+    }
+}

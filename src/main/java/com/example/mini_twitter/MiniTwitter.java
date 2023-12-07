@@ -280,6 +280,29 @@ public class MiniTwitter extends Application {
             }
         });
 
+        Button validate = new Button("Validate");
+        validate.setOnAction(event -> {
+            if (validateIDs()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Validation Result");
+                alert.setHeaderText(null);
+                alert.setContentText("Validation Successful, No ID's have spaces and are unique.");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Validation Result");
+                alert.setHeaderText(null);
+                alert.setContentText("Validation Failed, One or more ID's have spaces or is not unique.");
+                alert.showAndWait();
+            }
+        });
+
+        Button lastUpdatedUser = new Button("Last Updated User");
+        lastUpdatedUser.setOnAction(event -> {
+            User User = findLastUpdatedUser();
+            displayLastUpdatedUser(User);
+        });
+
         GridPane inputGrid = new GridPane();
         inputGrid.setHgap(10);
         inputGrid.setVgap(10);
@@ -291,7 +314,7 @@ public class MiniTwitter extends Application {
         inputGrid.add(groupIdTextArea, 1, 1);
         inputGrid.add(addGroupButton, 2, 1);
 
-        HBox hbox1 = new HBox(openUserViewButton);
+        HBox hbox1 = new HBox(openUserViewButton, validate, lastUpdatedUser);
         HBox hbox2 = new HBox(userTotal, groupTotal);
         HBox hbox3 = new HBox(messageTotal, positivePercentage);
 
@@ -346,5 +369,51 @@ public class MiniTwitter extends Application {
             }
         }
         return count;
+    }
+    private boolean validateIDs() {
+        Set<String> uniqueIDs = new HashSet<>();
+        for (User user : users) {
+            String userID = user.getUniqueID();
+            if (userID.contains(" ") || !uniqueIDs.add(userID)) {
+                return false; // Validation failed
+            }
+        }
+        for (Group group : groups) {
+            String groupID = group.getUniqueID();
+            if (groupID.contains(" ") || !uniqueIDs.add(groupID)) {
+                return false;
+            }
+            for (Entity member : group.getMembers()) {
+                if (member instanceof User) {
+                    String userID = member.getUniqueID();
+                    if (userID.contains(" ") || !uniqueIDs.add(userID)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private User findLastUpdatedUser() {
+        User lastUpdatedUser = null;
+        long latestUpdateTime = Long.MIN_VALUE;
+
+        for (User user : users) {
+            if (user.getLastUpdateTime() > latestUpdateTime) {
+                latestUpdateTime = user.getLastUpdateTime();
+                lastUpdatedUser = user;
+            }
+        }
+
+        return lastUpdatedUser;
+    }
+
+    private void displayLastUpdatedUser(User lastUpdatedUser) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Last Updated User");
+        alert.setHeaderText(null);
+        alert.setContentText("Last Updated User: " + lastUpdatedUser.getName());
+        alert.showAndWait();
     }
 }

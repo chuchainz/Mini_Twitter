@@ -12,6 +12,9 @@ public class User implements Entity, Subject, Observer {
     private ArrayList<User> followers;
     private ArrayList<User> followings;
     private ArrayList<String> newsFeed;
+    private long creationTime;
+
+    private long lastUpdateTime;
     public String toString() { return name; }
 
     public User(String uniqueID, String name) {
@@ -21,6 +24,8 @@ public class User implements Entity, Subject, Observer {
         this.followers = new ArrayList<>();
         this.followings = new ArrayList<>();
         this.newsFeed = new ArrayList<>();
+        this.creationTime = System.currentTimeMillis();
+        this.lastUpdateTime = this.creationTime;
     }
 
     public static synchronized User getInstance(String uniqueID, String name) {
@@ -83,6 +88,7 @@ public class User implements Entity, Subject, Observer {
 
     public void postTweet(String tweet) {
         newsFeed.add(tweet);
+        lastUpdateTime = System.currentTimeMillis();
         for (User follower : followers) {
             follower.addToNewsFeed(tweet);
         }
@@ -96,4 +102,8 @@ public class User implements Entity, Subject, Observer {
     public void addToNewsFeed(String tweet) {
         newsFeed.add(tweet);
     }
+
+    public long getCreationTime() {return creationTime;}
+
+    public long getLastUpdateTime() {return lastUpdateTime;}
 }
